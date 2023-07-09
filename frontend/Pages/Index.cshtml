@@ -1,10 +1,23 @@
 ﻿@page
+@using data.Models;
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Reservations</h1>
+
+    @{
+        var count = 0;
+        foreach (var item in (List<Reservation>) @ViewData["reservations"])
+        {
+            count++;
+            <p>Reservation @count</p>
+            <p>Reservation Start: @item.Start and ends on @item.End</p>
+        }
+        count = 0;
+        <p><a asp-page="/Resi/BookReservation">Make a reservation</a></p>
+
+    }
 </div>

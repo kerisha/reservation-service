@@ -1,0 +1,13 @@
+﻿@page
+@model BookReservationModel
+
+<div class="text-center">
+    <form method="post" asp-page="BookReservation">
+        <label for="start-date">Start Date</label>
+        <input type="datetime-local" name="start-date" id="start-date" />
+        <label for="end-date">End Date</label>
+        <input type="datetime-local" name="end-date" id="end-date" />
+        <input type="submit" value="Submit">
+        <a asp-page="/Index" class="btn btn-secondary">Cancel</a>
+    </form> 
+</div>
