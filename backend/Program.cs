@@ -7,18 +7,24 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// var config = new ConfigurationBuilder()
+// .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json")
+// .Build();
+
 var config = new ConfigurationBuilder()
-.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json")
+.AddJsonFile($"appsettings.json")
 .Build();
+
+
 
 string bookingsConnectionString = string.Empty;
 
 try
 {
-    bookingsConnectionString = config.GetConnectionString("DefaultConnection");
+    bookingsConnectionString = Environment.GetEnvironmentVariable("ABCGuestHouseConnString");
     if(string.IsNullOrEmpty(bookingsConnectionString))
     {
-        bookingsConnectionString = Environment.GetEnvironmentVariable("ShopDbConnection");
+        bookingsConnectionString = config.GetConnectionString("DefaultConnection");
     }
 }
 catch(Exception ex)

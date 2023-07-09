@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Console.WriteLine("Connection String: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = Environment.GetEnvironmentVariable("ABCGuestHouseConnString");
 
 builder.Services.AddDbContext<ReservationsContext>(options =>
     options.UseSqlServer(connectionString));
