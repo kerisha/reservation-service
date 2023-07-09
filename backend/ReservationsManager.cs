@@ -1,5 +1,6 @@
 using data;
 using data.Models;
+using backend.interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend 
@@ -24,10 +25,11 @@ namespace backend
                 return Results.Ok(reservation);
             });
 
-            app.MapPost("/reservations", async (ReservationsContext context, Reservation reservation) =>
+            app.MapPost("/reservations", async (ReservationsContext context, IMessageService messageService, Reservation reservation) =>
             {
                 await context.Reservations.AddAsync(reservation);
                 await context.SaveChangesAsync();
+                messageService.Enqueue(reservation);
                 return Results.Created($"/reservations/{reservation.Id}", reservation);
             });
 

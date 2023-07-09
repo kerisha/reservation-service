@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using backend;
+using backend.interfaces;
+using backend.services;
 using data;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,6 +52,9 @@ if (string.IsNullOrEmpty(qat))
 
 // Add a health check!!
 builder.Services.AddHealthChecks();
+
+// DI
+builder.Services.AddSingleton<IMessageService, MessageService>();
 
 var app = builder.Build();
 
