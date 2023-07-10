@@ -6,6 +6,15 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+        options.HttpsPort = 443;
+    });
+}
+
 // Console.WriteLine("Connection String: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // Add services to the container.
