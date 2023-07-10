@@ -11,7 +11,7 @@ string toNumber = Environment.GetEnvironmentVariable("TWILIO_TO_NUMBER");
 string fromNumber = Environment.GetEnvironmentVariable("TWILIO_FROM_NUMBER");
 
 
-ConnectionFactory factory = new ConnectionFactory() { HostName = "localhost", Port = 5672 };
+ConnectionFactory factory = new ConnectionFactory() { HostName = "rabbitmq", Port = 5672 };
 factory.UserName = "guest";
 factory.Password = "guest";
 IConnection conn = factory.CreateConnection();
