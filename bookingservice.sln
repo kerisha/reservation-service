@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "data", "data\data.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "notifier", "notifier\notifier.csproj", "{2F4D6DD1-695B-4BA9-B70F-FF8FA34B4E1B}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{901A0563-D620-4492-B74B-013B85685487}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2F4D6DD1-695B-4BA9-B70F-FF8FA34B4E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F4D6DD1-695B-4BA9-B70F-FF8FA34B4E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F4D6DD1-695B-4BA9-B70F-FF8FA34B4E1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901A0563-D620-4492-B74B-013B85685487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901A0563-D620-4492-B74B-013B85685487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901A0563-D620-4492-B74B-013B85685487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901A0563-D620-4492-B74B-013B85685487}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

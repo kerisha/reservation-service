@@ -2,15 +2,81 @@ version: '3.4'
 
 services:
 
-  rabbitmq: # login guest:guest
-    image: rabbitmq:3-management
-    hostname: "rabbitmq"
-    labels:
-      NAME: "rabbitmq"
+  #rabbitmq: # login guest:guest
+  #  image: rabbitmq:3-management
+  #  hostname: "rabbitmq"
+  #  labels:
+  #    NAME: "rabbitmq"
+  #  ports:
+  #  - "4369:4369"
+  #  - "5671:5671"
+  #  - "5672:5672"
+  #  - "25672:25672"
+  #  - "15671:15671"
+  #  - "15672:15672"
+
+  #backend:
+  #  image: ${DOCKER_REGISTRY-}backend
+  #  container_name: backend
+  #  build:
+  #    context: .
+  #    dockerfile: backend/Dockerfile
+  #  ports:
+  #  - "7000:7000"
+  #  environment:
+  #  - ASPNETCORE_URLS=http://+:7000;
+  #  depends_on:
+  #  - "rabbitmq"
+  #  - "db"
+  #  env_file:
+  #  - backend\backend.env
+
+
+  #frontend:
+  #  image: ${DOCKER_REGISTRY-}frontend
+  #  container_name: frontend
+  #  build:
+  #    context: .
+  #    dockerfile: frontend/Dockerfile
+  #  ports:
+  #  - "7002:7002"
+  #  environment:
+  #  - ASPNETCORE_URLS=http://+:7002;
+  #  - BACKEND_RESI_API=http://backend:7000
+  #  env_file:
+  #  - frontend\frontend.env
+  #  depends_on:
+  #   - "backend"
+  #   - "db"
+
+
+  #notifier:
+  #  image: ${DOCKER_REGISTRY-}notifier
+  #  build:
+  #    context: .
+  #    dockerfile: notifier/Dockerfile
+  #  depends_on:
+  #  - "rabbitmq"
+  #  env_file:
+  #  - notifier\notifier.env
+
+
+  db: 
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+    #env_file:
+    #  - data\data.env
     ports:
-    - "4369:4369"
-    - "5671:5671"
-    - "5672:5672"
-    - "25672:25672"
-    - "15671:15671"
-    - "15672:15672"
+      - 1433:1433
+
+  db-updater:
+    container_name: db-updater
+    build: 
+        context: .
+        dockerfile: data/Dockerfile
+    depends_on:
+      - "db"
+    command: dotnet ef database update --connection ${CONNECTION_STRING}
