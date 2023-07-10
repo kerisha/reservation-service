@@ -22,4 +22,7 @@ RUN dotnet publish "backend.csproj" -c Release -o /app/publish /p:UseAppHost=fal
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "backend.dll"]
+RUN apt-get update && apt-get install -y wget
+RUN wget -O /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x /wait-for-it.sh 
+#ENTRYPOINT ["dotnet", "backend.dll"]

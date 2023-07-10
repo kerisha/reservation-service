@@ -27,9 +27,16 @@ namespace backend
 
             app.MapPost("/reservations", async (ReservationsContext context, IMessageService messageService, Reservation reservation) =>
             {
-                await context.Reservations.AddAsync(reservation);
-                await context.SaveChangesAsync();
-                messageService.Enqueue(reservation);
+                try
+                {
+                    await context.Reservations.AddAsync(reservation);
+                    await context.SaveChangesAsync();
+                    messageService.Enqueue(reservation);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception : {ex}");
+                }
                 return Results.Created($"/reservations/{reservation.Id}", reservation);
             });
 

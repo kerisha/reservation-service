@@ -9,3 +9,4 @@ COPY . .
 WORKDIR "/src/data"
 RUN dotnet build "data.csproj" -c Release -o /src/build
 RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"

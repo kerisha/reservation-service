@@ -18,4 +18,7 @@ RUN dotnet publish "notifier.csproj" -c Release -o /app/publish /p:UseAppHost=fa
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "notifier.dll"]
+RUN apt-get update && apt-get install -y wget
+RUN wget -O /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x /wait-for-it.sh 
+#ENTRYPOINT ["dotnet", "notifier.dll"]

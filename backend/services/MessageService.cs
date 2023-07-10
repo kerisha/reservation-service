@@ -17,7 +17,7 @@ namespace backend.services
         {
             Console.WriteLine("about to connect to rabbit");
 
-            _factory = new ConnectionFactory() { HostName = "localhost", Port = 5672 };
+            _factory = new ConnectionFactory() { HostName = "rabbitmq", Port = 5672 };
             _factory.UserName = "guest";
             _factory.Password = "guest";
             _conn = _factory.CreateConnection();

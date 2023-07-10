@@ -33,12 +33,18 @@ namespace frontend.Pages
         public IActionResult OnPost()
         {
             var username = User.Identity.Name;
-            var users = _context.Users.ToList();
-            var userId = _context.Users.FirstOrDefault(u => u.Name == username).Id;
-            var reservation = new data.Models.Reservation { Status = data.Models.ReservationStatus.Confirmed, UserId = userId, Start = DateTime.Parse(Request.Form["start-date"]), End = DateTime.Parse(Request.Form["end-date"]) };
-            //_context.Reservations.Add(reservation);
-            //_context.SaveChanges();
+            Reservation reservation = null;
+            Console.WriteLine($"Username: {username}");
+            try
+            {
+                var userId = _context.Users.FirstOrDefault(u => u.Name == username).Id;
+                reservation = new data.Models.Reservation { Status = data.Models.ReservationStatus.Confirmed, UserId = userId, Start = DateTime.Parse(Request.Form["start-date"]), End = DateTime.Parse(Request.Form["end-date"]) };
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occured: {ex}");
+            }
 
             // API Call
             var client = new HttpClient();
