@@ -4,6 +4,7 @@ using backend.interfaces;
 using backend.services;
 using data;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,18 +79,6 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
-}
-else
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
 
 app.MapHealthChecks("/health");
 
