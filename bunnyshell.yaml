@@ -123,4 +123,4 @@ components:
             -
                 hostname: 'rabbitmq-{{ env.base_domain }}'
                 path: /
-                servicePort: 4369
+                servicePort: 5672

@@ -24,8 +24,9 @@ services:
       dockerfile: backend/Dockerfile
     ports:
     - "7000:7000"
+    - "7001:7001"
     environment:
-    - ASPNETCORE_URLS=http://+:7000;
+    - ASPNETCORE_URLS=http://+:7000;https://+:7001
     - ABCGuestHouseConnString=${CONNECTION_STRING}
     depends_on:
     - "rabbitmq"
@@ -41,9 +42,10 @@ services:
       dockerfile: frontend/Dockerfile
     ports:
     - "7002:7002"
+    - "7003:7003"
     environment:
-    - ASPNETCORE_URLS=http://+:7002;
-    - BACKEND_RESI_API=http://backend:7000
+    - ASPNETCORE_URLS=http://+:7002;https://+:7003
+    - BACKEND_RESI_API=https://backend:7001
     - ABCGuestHouseConnString=${CONNECTION_STRING}
     depends_on:
      - "backend"
