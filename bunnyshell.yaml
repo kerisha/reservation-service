@@ -1,7 +1,7 @@
 kind: Environment
-name: abcgh_env
+name: abcgh_final
 type: primary
-urlHandle: z7gtn5
+urlHandle: rpkawb
 components:
     -
         kind: Application
@@ -22,22 +22,22 @@ components:
                 - dotnet
                 - backend.dll
             environment:
-                ABCGuestHouseConnString: '<<BNS_SECRET>>'
-                ASPNETCORE_URLS: 'http://+:7000;'
+                ABCGuestHouseConnString: ''
             ports:
-                - '7000:7000'
+                - '8080:80'
+                - '8081:443'
         hosts:
             -
                 hostname: 'backend-{{ env.base_domain }}'
                 path: /
-                servicePort: 7000
+                servicePort: 8080
     -
         kind: Database
         name: db
         dockerCompose:
             environment:
                 ACCEPT_EULA: 'Y'
-                SA_PASSWORD: '<<BNS_SECRET>>'
+                SA_PASSWORD: ''
             image: 'mcr.microsoft.com/mssql/server:2022-latest'
             ports:
                 - '1433:1433'
@@ -59,7 +59,7 @@ components:
                 - '--connection'
                 - ''
             environment:
-                CONNECTION_STRING: '<<BNS_SECRET>>'
+                CONNECTION_STRING: ''
     -
         kind: Application
         name: frontend
@@ -71,16 +71,16 @@ components:
                 context: .
                 dockerfile: frontend/Dockerfile
             environment:
-                ABCGuestHouseConnString: '<<BNS_SECRET>>'
-                ASPNETCORE_URLS: 'http://+:7002;'
-                BACKEND_RESI_API: 'http://backend:7000'
+                ABCGuestHouseConnString: ''
+                BACKEND_RESI_API: 'https://backend'
             ports:
-                - '7002:7002'
+                - '8080:80'
+                - '8081:443'
         hosts:
             -
                 hostname: 'frontend-{{ env.base_domain }}'
                 path: /
-                servicePort: 7002
+                servicePort: 8080
     -
         kind: Application
         name: notifier
@@ -100,10 +100,10 @@ components:
                 - dotnet
                 - notifier.dll
             environment:
-                TWILIO_ACCOUNT_SID: '<<BNS_SECRET>>'
-                TWILIO_AUTH_TOKEN: '<<BNS_SECRET>>'
-                TWILIO_FROM_NUMBER: '<<BNS_SECRET>>'
-                TWILIO_TO_NUMBER: '<<BNS_SECRET>>'
+                TWILIO_ACCOUNT_SID: ''
+                TWILIO_AUTH_TOKEN: ''
+                TWILIO_FROM_NUMBER: ''
+                TWILIO_TO_NUMBER: ''
     -
         kind: Service
         name: rabbitmq
@@ -113,9 +113,9 @@ components:
             labels:
                 NAME: rabbitmq
             ports:
-                - '4369:4369'
-                - '5671:5671'
                 - '5672:5672'
+                - '5671:5671'
+                - '4369:4369'
                 - '25672:25672'
                 - '15671:15671'
                 - '15672:15672'
