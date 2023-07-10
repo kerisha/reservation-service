@@ -16,57 +16,57 @@ services:
       - "15671:15671"
       - "15672:15672"
 
-  backend:
-    image: ${DOCKER_REGISTRY-}backend
-    container_name: backend
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    ports:
-    - "7000:7000"
-    - "7001:7001"
-    environment:
-    - ASPNETCORE_URLS=http://+:7000;https://+:7001
-    - ABCGuestHouseConnString=${CONNECTION_STRING}
-    depends_on:
-    - "rabbitmq"
-    - "db"
-    command: /wait-for-it.sh -t 0 "rabbitmq:5672" -- dotnet backend.dll
+  #backend:
+  #  image: ${DOCKER_REGISTRY-}backend
+  #  container_name: backend
+  #  build:
+  #    context: .
+  #    dockerfile: backend/Dockerfile
+  #  ports:
+  #  - "7000:7000"
+  #  - "7001:7001"
+  #  environment:
+  #  - ASPNETCORE_URLS=http://+:7000;https://+:7001
+  #  - ABCGuestHouseConnString=${CONNECTION_STRING}
+  #  depends_on:
+  #  - "rabbitmq"
+  #  - "db"
+  #  command: /wait-for-it.sh -t 0 "rabbitmq:5672" -- dotnet backend.dll
 
 
-  frontend:
-    image: ${DOCKER_REGISTRY-}frontend
-    container_name: frontend
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-    ports:
-    - "7002:7002"
-    - "7003:7003"
-    environment:
-    - ASPNETCORE_URLS=http://+:7002;https://+:7003
-    - BACKEND_RESI_API=https://backend:7001
-    - ABCGuestHouseConnString=${CONNECTION_STRING}
-    depends_on:
-     - "backend"
-     - "db"
-    command: /wait-for-it.sh -t 0 "backend:7000" -- dotnet frontend.dll
+  #frontend:
+  #  image: ${DOCKER_REGISTRY-}frontend
+  #  container_name: frontend
+  #  build:
+  #    context: .
+  #    dockerfile: frontend/Dockerfile
+  #  ports:
+  #  - "7002:7002"
+  #  - "7003:7003"
+  #  environment:
+  #  - ASPNETCORE_URLS=http://+:7002;https://+:7003
+  #  - BACKEND_RESI_API=https://backend:7001
+  #  - ABCGuestHouseConnString=${CONNECTION_STRING}
+  #  depends_on:
+  #   - "backend"
+  #   - "db"
+  #  command: /wait-for-it.sh -t 0 "backend:7000" -- dotnet frontend.dll
 
 
-  notifier:
-     image: ${DOCKER_REGISTRY-}notifier
-     container_name: notifier
-     build:
-       context: .
-       dockerfile: notifier/Dockerfile
-     environment:
-       - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
-       - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
-       - TWILIO_TO_NUMBER=${TWILIO_TO_NUMBER}
-       - TWILIO_FROM_NUMBER=${TWILIO_FROM_NUMBER}
-     depends_on:
-       - rabbitmq
-     command: /wait-for-it.sh -t 0 "rabbitmq:5672" -- dotnet notifier.dll
+  #notifier:
+  #   image: ${DOCKER_REGISTRY-}notifier
+  #   container_name: notifier
+  #   build:
+  #     context: .
+  #     dockerfile: notifier/Dockerfile
+  #   environment:
+  #     - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+  #     - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+  #     - TWILIO_TO_NUMBER=${TWILIO_TO_NUMBER}
+  #     - TWILIO_FROM_NUMBER=${TWILIO_FROM_NUMBER}
+  #   depends_on:
+  #     - rabbitmq
+  #   command: /wait-for-it.sh -t 0 "rabbitmq:5672" -- dotnet notifier.dll
         
 
   db: 
