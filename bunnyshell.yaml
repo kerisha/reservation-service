@@ -1,0 +1,126 @@
+kind: Environment
+name: abcgh_env
+type: primary
+urlHandle: z7gtn5
+components:
+    -
+        kind: Application
+        name: backend
+        gitRepo: 'https://github.com/kerisha/reservation-service.git'
+        gitBranch: main
+        gitApplicationPath: /
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: backend/Dockerfile
+            command:
+                - /wait-for-it.sh
+                - '-t'
+                - '0'
+                - 'rabbitmq:5672'
+                - '--'
+                - dotnet
+                - backend.dll
+            environment:
+                ABCGuestHouseConnString: '<<BNS_SECRET>>'
+                ASPNETCORE_URLS: 'http://+:7000;'
+            ports:
+                - '7000:7000'
+        hosts:
+            -
+                hostname: 'backend-{{ env.base_domain }}'
+                path: /
+                servicePort: 7000
+    -
+        kind: Database
+        name: db
+        dockerCompose:
+            environment:
+                ACCEPT_EULA: 'Y'
+                SA_PASSWORD: '<<BNS_SECRET>>'
+            image: 'mcr.microsoft.com/mssql/server:2022-latest'
+            ports:
+                - '1433:1433'
+    -
+        kind: Database
+        name: db-updater
+        gitRepo: 'https://github.com/kerisha/reservation-service.git'
+        gitBranch: main
+        gitApplicationPath: /
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: data/Dockerfile
+            command:
+                - dotnet
+                - ef
+                - database
+                - update
+                - '--connection'
+                - ''
+            environment:
+                CONNECTION_STRING: '<<BNS_SECRET>>'
+    -
+        kind: Application
+        name: frontend
+        gitRepo: 'https://github.com/kerisha/reservation-service.git'
+        gitBranch: main
+        gitApplicationPath: /
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: frontend/Dockerfile
+            environment:
+                ABCGuestHouseConnString: '<<BNS_SECRET>>'
+                ASPNETCORE_URLS: 'http://+:7002;'
+                BACKEND_RESI_API: 'http://backend:7000'
+            ports:
+                - '7002:7002'
+        hosts:
+            -
+                hostname: 'frontend-{{ env.base_domain }}'
+                path: /
+                servicePort: 7002
+    -
+        kind: Application
+        name: notifier
+        gitRepo: 'https://github.com/kerisha/reservation-service.git'
+        gitBranch: main
+        gitApplicationPath: /
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: notifier/Dockerfile
+            command:
+                - /wait-for-it.sh
+                - '-t'
+                - '0'
+                - 'rabbitmq:5672'
+                - '--'
+                - dotnet
+                - notifier.dll
+            environment:
+                TWILIO_ACCOUNT_SID: '<<BNS_SECRET>>'
+                TWILIO_AUTH_TOKEN: '<<BNS_SECRET>>'
+                TWILIO_FROM_NUMBER: '<<BNS_SECRET>>'
+                TWILIO_TO_NUMBER: '<<BNS_SECRET>>'
+    -
+        kind: Service
+        name: rabbitmq
+        dockerCompose:
+            hostname: rabbitmq
+            image: 'rabbitmq:3-management'
+            labels:
+                NAME: rabbitmq
+            ports:
+                - '4369:4369'
+                - '5671:5671'
+                - '5672:5672'
+                - '25672:25672'
+                - '15671:15671'
+                - '15672:15672'
+        hosts:
+            -
+                hostname: 'rabbitmq-{{ env.base_domain }}'
+                path: /
+                servicePort: 4369
