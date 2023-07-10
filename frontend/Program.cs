@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 //using frontend.Data;
 using data;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
