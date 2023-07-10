@@ -17,38 +17,40 @@ services:
       - "15672:15672"
 
   backend:
-     image: ${DOCKER_REGISTRY-}backend
-     container_name: backend
-     build:
-       context: .
-       dockerfile: backend/Dockerfile
-     ports:
-     - "7000:7000"
-     environment:
-     - ASPNETCORE_URLS=http://+:7000;
-     - ABCGuestHouseConnString=${CONNECTION_STRING}
-     depends_on:
-     - "rabbitmq"
-     - "db"
-     command: /wait-for-it.sh -t 0 "rabbitmq:5672" -- dotnet backend.dll
+    image: ${DOCKER_REGISTRY-}backend
+    container_name: backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+    - "7000:7000"
+    - "7001:7001"
+    environment:
+    - ASPNETCORE_URLS=http://+:7000;https://+:7001
+    - ABCGuestHouseConnString=${CONNECTION_STRING}
+    depends_on:
+    - "rabbitmq"
+    - "db"
+    command: /wait-for-it.sh -t 0 "rabbitmq:5672" -- dotnet backend.dll
 
 
   frontend:
-     image: ${DOCKER_REGISTRY-}frontend
-     container_name: frontend
-     build:
-       context: .
-       dockerfile: frontend/Dockerfile
-     ports:
-     - "7002:7002"
-     environment:
-     - ASPNETCORE_URLS=http://+:7002;
-     - BACKEND_RESI_API=http://backend:7000
-     - ABCGuestHouseConnString=${CONNECTION_STRING}
-     depends_on:
-      - "backend"
-      - "db"
-     command: /wait-for-it.sh -t 0 "backend:7000" -- dotnet frontend.dll
+    image: ${DOCKER_REGISTRY-}frontend
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+    - "7002:7002"
+    - "7003:7003"
+    environment:
+    - ASPNETCORE_URLS=http://+:7002;https://+:7003
+    - BACKEND_RESI_API=https://backend:7001
+    - ABCGuestHouseConnString=${CONNECTION_STRING}
+    depends_on:
+     - "backend"
+     - "db"
+    command: /wait-for-it.sh -t 0 "backend:7000" -- dotnet frontend.dll
 
 
   notifier:

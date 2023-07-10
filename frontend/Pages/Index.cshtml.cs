@@ -36,7 +36,7 @@ public class IndexModel : PageModel
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"An exception occured: {ex}");
+                Console.WriteLine($"An exception occured: {ex}");
             }
         }
         ViewData["LeUser"] = User.Identity.Name;
